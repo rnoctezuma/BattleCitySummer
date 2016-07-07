@@ -27,7 +27,7 @@ namespace BattleCitySummer
 
         public PlayerTank(MainGame F, int x, int y)
         {
-            this.playerBox = new Box(x, y, 8, 8, 0, 0);
+            this.playerBox = new Box(x, y, 8, 8, 0, 0, false);
             health = 100;
            // shoot = false;
            // pos = 0;
@@ -80,7 +80,7 @@ namespace BattleCitySummer
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
         {
-            DrawRectangle(new Rectangle((int)this.playerBox.x, (int)this.playerBox.y, (int)this.playerBox.width, (int)this.playerBox.height), Color.Fuchsia, graphics, spriteBatch);
+            DrawRectangle(new Rectangle((int)this.playerBox.x, (int)this.playerBox.y, (int)this.playerBox.width, (int)this.playerBox.height), Color.Green, graphics, spriteBatch);
         }
 
         public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch)

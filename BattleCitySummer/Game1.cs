@@ -8,7 +8,7 @@ namespace BattleCitySummer
     {
         GraphicsDeviceManager graphics;   //default graphics
         SpriteBatch spriteBatch; //graphics for sprites
-        public MainGame game = new MainGame();
+    //  public MainGame game = new MainGame();                where's right locate?
         public int widthWindow;
         public int heightWindow;
 
@@ -21,6 +21,9 @@ namespace BattleCitySummer
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            graphics.PreferredBackBufferWidth = (int)ScreenManager.Instance.Dimensions.X;
+            graphics.PreferredBackBufferHeight = (int)ScreenManager.Instance.Dimensions.Y;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
@@ -29,37 +32,43 @@ namespace BattleCitySummer
             spriteBatch = new SpriteBatch(GraphicsDevice);
             widthWindow = Window.ClientBounds.Width;
             heightWindow = Window.ClientBounds.Height;
-            this.game.Init();
+         //   this.game.Init();
+
+            ScreenManager.Instance.LoadContent(Content);
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// game-specific content.
-        /// </summary>
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            ScreenManager.Instance.UnloadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            this.game.Update();
-            BarrierCheck();
+       //     this.game.Update();
+        //    BarrierCheck();
+
+            ScreenManager.Instance.Update(gameTime);
+            //UPDATE HERE
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+            GraphicsDevice.Clear(Color.White);
+
+/*            spriteBatch.Begin();
             this.game.Draw(graphics, spriteBatch);
             spriteBatch.End();
             //DRAW HERE
+*/
+            ScreenManager.Instance.Draw(spriteBatch, graphics);
+
             base.Draw(gameTime);        
         }
-
+/*
         public void BarrierCheck()                  
         {
             if (this.game.player.playerBox.x < 0)
@@ -71,6 +80,6 @@ namespace BattleCitySummer
             if (this.game.player.playerBox.y > Window.ClientBounds.Height - this.game.player.playerBox.height)
                 this.game.player.playerBox.y = Window.ClientBounds.Height - this.game.player.playerBox.height;
         }
-
+        */
     }
 }

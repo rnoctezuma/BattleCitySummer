@@ -41,7 +41,7 @@ namespace BattleCitySummer
             }
 
             // Физика
-/*
+
 
             for (int i = 0; i < Boxes.Count - 1; i++)  //проверяю каждую коробку в с каждой (кроме себя)
             {
@@ -69,15 +69,17 @@ namespace BattleCitySummer
                     }
                 }
             }
-            */
+            
         }
 
         public void Init()
         {
             Boxes = new List<Box>();
             GameObjects = new List<IGameObject>();
-            this.player = new PlayerTank(this, 644, 352);
+            this.player = new PlayerTank(this, 500, 500);
             this.GameObjects.Add(player);
+
+            this.GameObjects.Add(new EnemyTank(this, 100, 100));
             this.gameover = false;
         }
     }
