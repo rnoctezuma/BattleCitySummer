@@ -11,7 +11,7 @@ namespace BattleCitySummer
 {
     public class GameScreen
     {
-        protected ContentManager content;
+        public ContentManager content;
 
         public virtual void LoadContent()
         {

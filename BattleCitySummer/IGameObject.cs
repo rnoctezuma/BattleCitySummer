@@ -10,7 +10,7 @@ namespace BattleCitySummer
 {
     public interface IGameObject
     {
-        void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch);
+        void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel);
         void Update(MainGame F);
     }
 }

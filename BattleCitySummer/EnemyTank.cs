@@ -35,16 +35,16 @@ namespace BattleCitySummer
         }
 
 
-        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
         {
-            DrawRectangle(new Rectangle((int)this.enemyBox.x, (int)this.enemyBox.y, (int)this.enemyBox.width, (int)this.enemyBox.height), Color.Red, graphics, spriteBatch);
+            DrawRectangle(new Rectangle((int)this.enemyBox.x - (int)this.enemyBox.width, (int)this.enemyBox.y - (int)this.enemyBox.height, 
+                (int)this.enemyBox.width*2, (int)this.enemyBox.height*2), Color.Red, graphics, spriteBatch, pixel);
         }
 
-        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
+        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
         {
-            var rect = new Texture2D(graphics.GraphicsDevice, 1, 1);
-            rect.SetData(new[] { color });
-            spriteBatch.Draw(rect, coords, color);
+            pixel.SetData(new[] { color });
+            spriteBatch.Draw(pixel, coords, color);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace BattleCitySummer
 
         public ScreenManager()
         {
-            Dimensions = new Vector2(800, 600);
+            Dimensions = new Vector2(512, 512);
             currentScreen = new ActionScreen();
         }
 

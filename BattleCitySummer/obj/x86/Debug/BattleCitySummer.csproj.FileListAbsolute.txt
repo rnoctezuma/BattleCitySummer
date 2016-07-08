@@ -48,3 +48,4 @@ D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\SharpDX.XInpu
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\SharpDX.RawInput.xml
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
 D:\Desktop\BattleCitySummer\BattleCitySummer\obj\x86\Debug\BattleCitySummer.csprojResolveAssemblyReference.cache
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\pixel.xnb

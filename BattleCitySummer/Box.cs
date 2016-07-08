@@ -37,19 +37,18 @@ namespace BattleCitySummer
             this.Static = Static;
         }
 
-        /*
-        public bool Collides(Box secondBox) //collides check
-        {
-            return this.boxRect.Intersects(secondBox.boxRect);
-        }
-        */
 
         public bool Collides(Box box, ref double dx, ref double dy)
-        {
+        {/*
             double ax = this.x + this.width/2d - box.x - box.width /2d; //расстояние между центрами проверяемых коробок
             double ay = this.y + this.height /2d - box.y - box.height /2d;
             double aW = this.width /2d + box.width /2d; //идеальное значение между центрами коробок
-            double aH = this.height /2d  + box.height/2d ;
+            double aH = this.height /2d  + box.height/2d ;*/
+
+            double ax = this.x - box.x; //расстояние между центрами проверяемых коробок
+            double ay = this.y - box.y;
+            double aW = this.width + box.width; //идеальное значение между центрами коробок
+            double aH = this.height + box.height;
 
             if (Math.Abs(ax) > aW)         //если пересечения нет
             { return false; }              //

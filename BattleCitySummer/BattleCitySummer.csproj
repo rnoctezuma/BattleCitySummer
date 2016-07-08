@@ -45,6 +45,7 @@
     <Compile Include="MainGame.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="IGameObject.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="PlayerTank.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

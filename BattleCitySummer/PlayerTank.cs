@@ -48,14 +48,18 @@ namespace BattleCitySummer
             this.playerBox.vx = 0;
             this.playerBox.vy = 0;
 
-            if (keyboardState.IsKeyDown(Keys.Left))  //mothion
+            if (keyboardState.IsKeyDown(Keys.Left))  //motion
                 this.playerBox.vx -= 3;
             if (keyboardState.IsKeyDown(Keys.Right))
                 this.playerBox.vx += 3;
             if (keyboardState.IsKeyDown(Keys.Up))
-                this.playerBox.y -= 3;
+                this.playerBox.vy -= 3;
             if (keyboardState.IsKeyDown(Keys.Down))
-                this.playerBox.y += 3;
+                this.playerBox.vy += 3;
+            if (Math.Abs(this.playerBox.vy) > 0)
+                this.playerBox.vx = 0;
+            if (Math.Abs(this.playerBox.vx) > 0)
+                this.playerBox.vy = 0;
 
             if (health <= 0)
             {
@@ -64,30 +68,16 @@ namespace BattleCitySummer
         }
         
 
-        /*
-        public void BarrierCheck()                    //Как-то передать размеры окна???
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
         {
-            if (this.playerBox.x < 0)
-                this.playerBox.x = 0;
-            if (this.playerBox.y < 0)
-                this.playerBox.y = 0;
-            if (this.playerBox.x > ClientBounds.Width - goodSpriteSize.X)
-                this.playerBox.x = Window.ClientBounds.Width - goodSpriteSize.X;
-            if (goodSpritePosition.Y > Window.ClientBounds.Height - goodSpriteSize.Y)
-                goodSpritePosition.Y = Window.ClientBounds.Height - goodSpriteSize.Y;
-        }
-        */
-
-        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
-        {
-            DrawRectangle(new Rectangle((int)this.playerBox.x, (int)this.playerBox.y, (int)this.playerBox.width, (int)this.playerBox.height), Color.Green, graphics, spriteBatch);
+            DrawRectangle(new Rectangle((int)this.playerBox.x - (int)this.playerBox.width, (int)this.playerBox.y - (int)this.playerBox.height, 
+                (int)this.playerBox.width*2, (int)this.playerBox.height*2), Color.Green, graphics, spriteBatch, pixel);
         }
 
-        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
-        {
-            var rect = new Texture2D(graphics.GraphicsDevice, 1, 1);
-            rect.SetData(new[] { color });
-            spriteBatch.Draw(rect, coords, color);
+        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
+        {         
+            pixel.SetData(new[] { color });
+            spriteBatch.Draw(pixel, coords, color);
         }
     }
 }

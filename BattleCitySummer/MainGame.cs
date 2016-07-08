@@ -21,11 +21,11 @@ namespace BattleCitySummer
             this.Boxes.Clear();
         }
 
-        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
         {
             foreach (IGameObject S in GameObjects)
             {
-                S.Draw(graphics, spriteBatch);
+                S.Draw(graphics, spriteBatch, pixel);
             }
         }
 
@@ -76,7 +76,7 @@ namespace BattleCitySummer
         {
             Boxes = new List<Box>();
             GameObjects = new List<IGameObject>();
-            this.player = new PlayerTank(this, 500, 500);
+            this.player = new PlayerTank(this, 400, 400);
             this.GameObjects.Add(player);
 
             this.GameObjects.Add(new EnemyTank(this, 100, 100));

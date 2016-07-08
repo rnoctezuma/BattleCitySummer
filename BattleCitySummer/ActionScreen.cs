@@ -11,11 +11,15 @@ namespace BattleCitySummer
 {
     public class ActionScreen : GameScreen
     {
+        public Texture2D texture;
         public MainGame game = new MainGame();
+        public Map map = new Map();
 
         public override void LoadContent()
         {
+            base.LoadContent();
             this.game.Init();
+            texture = content.Load<Texture2D>("pixel");
         }
 
         public override void UnloadContent()
@@ -25,14 +29,16 @@ namespace BattleCitySummer
 
         public override void Update(GameTime gameTime)
         {
-            this.game.Update();
+          //  this.game.Update();
+            this.map.Update();
+
         }
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
-            spriteBatch.Begin();
-            this.game.Draw(graphics, spriteBatch);
-            spriteBatch.End();
+         //  spriteBatch.Draw(texture, Vector2.Zero, Color.White);
+         //  this.game.Draw(graphics, spriteBatch, texture);
+            this.map.Draw(graphics, spriteBatch, texture);
         }
     }
 }
