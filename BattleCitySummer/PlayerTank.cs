@@ -27,7 +27,7 @@ namespace BattleCitySummer
 
         public PlayerTank(MainGame F, int x, int y)
         {
-            this.playerBox = new Box(x, y, 8, 8, 0, 0, false);
+            this.playerBox = new Box(x, y, 16, 16, 0, 0, false);
             health = 100;
            // shoot = false;
            // pos = 0;

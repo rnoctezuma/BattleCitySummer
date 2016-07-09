@@ -29,16 +29,15 @@ namespace BattleCitySummer
 
         public override void Update(GameTime gameTime)
         {
-          //  this.game.Update();
-            this.map.Update();
+            this.game.Update();
+         //   this.map.Update();
 
         }
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
-         //  spriteBatch.Draw(texture, Vector2.Zero, Color.White);
-         //  this.game.Draw(graphics, spriteBatch, texture);
-            this.map.Draw(graphics, spriteBatch, texture);
+            this.game.Draw(graphics, spriteBatch, texture);
+        //   this.map.Draw(graphics, spriteBatch, texture);
         }
     }
 }

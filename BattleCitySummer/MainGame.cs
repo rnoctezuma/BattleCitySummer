@@ -13,6 +13,7 @@ namespace BattleCitySummer
         public List <IGameObject> GameObjects { get; set; }
         public List <Box> Boxes { get; set; }
         public PlayerTank player = null;
+        public Map map;
         public bool gameover { get; set; }
 
         public void Clear()
@@ -74,12 +75,15 @@ namespace BattleCitySummer
 
         public void Init()
         {
+            //create new map
+            map = new Map();
+
             Boxes = new List<Box>();
             GameObjects = new List<IGameObject>();
-            this.player = new PlayerTank(this, 400, 400);
+            this.player = new PlayerTank(this, 96, 16);
             this.GameObjects.Add(player);
 
-            this.GameObjects.Add(new EnemyTank(this, 100, 100));
+            this.GameObjects.Add(new EnemyTank(this, 16, 16));
             this.gameover = false;
         }
     }
