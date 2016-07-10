@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="ActionScreen.cs" />
     <Compile Include="Box.cs" />
+    <Compile Include="Bullet.cs" />
     <Compile Include="EnemyTank.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="MainGame.cs" />

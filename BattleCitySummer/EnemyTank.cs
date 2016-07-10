@@ -14,6 +14,7 @@ namespace BattleCitySummer
         public int health { get; set; }
         public List<KeyValuePair<int, int>> wave = new List<KeyValuePair<int, int>>();  //note: wave normalize (wave.Key --, wave.Value --)
         public int[] playerPosition = new int[2];
+        public bool destroy = false;
 
         public EnemyTank(MainGame F, int x, int y)
         {
@@ -22,6 +23,17 @@ namespace BattleCitySummer
             // shoot = false;
             // pos = 0;
             F.Boxes.Add(this.enemyBox);
+        }
+
+        public void Destroy()
+        {
+            destroy = true;
+            this.enemyBox.destroy = true;
+        }
+
+        public bool isDestroyed()
+        {
+            return destroy;
         }
 
         public void Damage(int x)
@@ -136,48 +148,35 @@ namespace BattleCitySummer
         {
             int startX = wave[wave.Count - 1].Key - 1;
             int startY = wave[wave.Count - 1].Value - 1;
+            double diffX = 0;
+            double diffY = 0;
             if (wave.Count != 1)
             {
+                diffX = (wave[wave.Count - 2].Key - 1) * 32 + 16 - this.enemyBox.x;
+                diffY = (wave[wave.Count - 2].Value - 1) * 32 + 16 - this.enemyBox.y;
 
-                /*
-               if (wave[wave.Count - 2].Value - 1 < startY)
-                    this.enemyBox.y -= 0.3;
-                else if (wave[wave.Count - 2].Value - 1 > startY)
-                    this.enemyBox.y += 0.3; 
-                else if (wave[wave.Count - 2].Key - 1 < startX)
-                    this.enemyBox.x -= 0.3;
-                else if (wave[wave.Count - 2].Value - 1 > startX)
-                    this.enemyBox.x += 0.3;        */
-                if (wave[wave.Count - 2].Value - 1 < startY)
+                if (Math.Abs(diffX) > Math.Abs(diffY) || Math.Abs(diffY)>1 && Math.Abs(diffY) > Math.Abs(diffX))
                 {
-                    this.enemyBox.x = wave[wave.Count - 2].Value;
-                    this.enemyBox.y = wave[wave.Count - 2].Key;
+                    this.enemyBox.vy = diffY / Math.Abs(diffY) * 0.3;
+               //     this.enemyBox.vx = 0;
                 }
-                else if (wave[wave.Count - 2].Value - 1 > startY)
+
+               if (Math.Abs(diffX) < Math.Abs(diffY) || Math.Abs(diffX) > 1 && Math.Abs(diffY) < Math.Abs(diffX))
                 {
-                    this.enemyBox.x = wave[wave.Count - 2].Value;
-                    this.enemyBox.y = wave[wave.Count - 2].Key;
+                    this.enemyBox.vx = diffX / Math.Abs(diffX) * 0.3;
+               //     this.enemyBox.vy = 0;
                 }
-                else if (wave[wave.Count - 2].Key - 1 < startX)
-                {
-                    this.enemyBox.x = wave[wave.Count - 2].Value;
-                    this.enemyBox.y = wave[wave.Count - 2].Key;
-                }
-                else if (wave[wave.Count - 2].Value - 1 > startX)
-                {
-                    this.enemyBox.x = wave[wave.Count - 2].Value;
-                    this.enemyBox.y = wave[wave.Count - 2].Key;
-                }
+                
             }
         }
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
-        {/*
+        {
             foreach (KeyValuePair<int, int> waveElement in wave)
             {
                 DrawRectangle(new Rectangle((waveElement.Key - 1) * 512 / 16, (waveElement.Value - 1) * 512 / 16, 32, 32), Color.Green, graphics, spriteBatch, texture);
             }
-            */
+            
 
             DrawRectangle(new Rectangle((int)this.enemyBox.x - (int)this.enemyBox.width, (int)this.enemyBox.y - (int)this.enemyBox.height,
                 (int)this.enemyBox.width * 2, (int)this.enemyBox.height * 2), Color.Red, graphics, spriteBatch, texture);

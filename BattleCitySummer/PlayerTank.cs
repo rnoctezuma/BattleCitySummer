@@ -13,25 +13,30 @@ namespace BattleCitySummer
     {
         public Box playerBox { get; set; }
         public int health { get; set; }
+        public double shot = 11;
+        public bool destroy = false;
 
-        // public bool right;
-        // public bool left;
-        // public bool up;
-        // public bool down;
-        //  public bool shoot;
-        //  public bool shot;
-        //  public bool destroy = false;
         //  public int score = 0;
 
-        //  public double pos;
+          public double pos; //направление взгляда
 
         public PlayerTank(MainGame F, int x, int y)
         {
             this.playerBox = new Box(x, y, 16, 16, 0, 0, false);
-            health = 100;
-           // shoot = false;
-           // pos = 0;
+            this.health = 100;
+            this.pos = 3.0 / 2.0 * Math.PI;
             F.Boxes.Add(this.playerBox);
+        }
+
+        public void Destroy()
+        {
+            destroy = true;
+            this.playerBox.destroy = true;
+        }
+
+        public bool isDestroyed()
+        {
+            return destroy;
         }
 
         public void Damage(int x)
@@ -49,24 +54,44 @@ namespace BattleCitySummer
             this.playerBox.vy = 0;
 
             if (keyboardState.IsKeyDown(Keys.Left))  //motion
+            {
                 this.playerBox.vx -= 3;
-            if (keyboardState.IsKeyDown(Keys.Right))
+                this.pos = Math.PI;
+            }
+            else if (keyboardState.IsKeyDown(Keys.Right))
+            {
                 this.playerBox.vx += 3;
-            if (keyboardState.IsKeyDown(Keys.Up))
+                this.pos = 0;
+            }
+            else if (keyboardState.IsKeyDown(Keys.Up))
+            {
                 this.playerBox.vy -= 3;
-            if (keyboardState.IsKeyDown(Keys.Down))
+                this.pos = 3.0 / 2.0 * Math.PI;
+            }
+            else if (keyboardState.IsKeyDown(Keys.Down))
+            {
                 this.playerBox.vy += 3;
-            if (Math.Abs(this.playerBox.vy) > 0)
-                this.playerBox.vx = 0;
-            if (Math.Abs(this.playerBox.vx) > 0)
-                this.playerBox.vy = 0;
-
+                this.pos = 1.0 / 2.0 * Math.PI;
+            }
+            else if (keyboardState.IsKeyDown(Keys.LeftControl))
+            { 
+                if (this.shot > 10)
+                {
+                    F.GameObjects.Add(new Bullet(F, this.playerBox.x, this.playerBox.y, Math.Cos(pos)*5, Math.Sin(pos)*5, this));
+                    this.shot = 0;
+                }
+            }
+            this.shot += 0.3;
             if (health <= 0)
             {
                 F.gameover = true;
-            }
+            }        
         }
-        
+       
+        public void MoveCheck()
+        {
+
+        }
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
         {

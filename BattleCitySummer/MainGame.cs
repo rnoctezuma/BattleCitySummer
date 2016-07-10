@@ -14,6 +14,7 @@ namespace BattleCitySummer
         public List <Box> Boxes { get; set; }
         public PlayerTank player = null;
         public Map map;
+        private Box barrier = new Box(288, 288, 285, 285, 0, 0, false);
         public bool gameover { get; set; }
 
         public void Clear()
@@ -28,18 +29,25 @@ namespace BattleCitySummer
             {
                 S.Draw(graphics, spriteBatch, pixel);
             }
+            
+            foreach (Box S in Boxes)
+            {
+                S.Draw(graphics, spriteBatch, pixel);
+            }
         }
 
         public void Update()
         {
-            foreach (Box S in Boxes)
+            foreach (Box box in Boxes)
             {
-                S.Update();
+                box.Update();
             }
-            foreach (IGameObject S in GameObjects)
+            /*
+            foreach (IGameObject gameObject in GameObjects)
             {
-                S.Update(this);
+                gameObject.Update(this);
             }
+            */
 
             // Физика
 
@@ -71,19 +79,60 @@ namespace BattleCitySummer
                 }
             }
             
+            double tmp = 0;
+            for (int i = 0; i < GameObjects.Count; i++)
+            {
+                GameObjects[i].Update(this);
+                if (GameObjects[i].GetType() == typeof(Bullet))
+                {
+                    if (!((Bullet)GameObjects[i]).bulletBox.Collides(barrier, ref tmp, ref tmp)) //если не внутри барьера
+                    {
+                        GameObjects[i].Destroy();
+                    }
+                }
+            }
+            
+            //GarbageCollect
+            for (int i = 0; i < GameObjects.Count; i++) //удаление всех игровых коробок и объектов которые должны быть удалены
+            {
+                if (GameObjects[i].isDestroyed())
+                {
+                    GameObjects.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            for (int i = 0; i < Boxes.Count; i++)
+            {
+                if (Boxes[i].destroy)
+                {
+                    Boxes.RemoveAt(i);
+                    i--;
+                }
+            }
+
         }
 
         public void Init()
         {
-            //create new map
-            map = new Map();
-
             Boxes = new List<Box>();
             GameObjects = new List<IGameObject>();
-            this.player = new PlayerTank(this, 96, 16);
+            map = new Map();
+            //barrier
+            this.Boxes.Add(new Box(288, 588, 295, 10, 0, 0, true));
+            this.Boxes.Add(new Box(288, -12, 295, 10, 0, 0, true));
+            this.Boxes.Add(new Box(588, 288, 10, 290, 0, 0, true));
+            this.Boxes.Add(new Box(-12, 288, 10, 290, 0, 0, true));
+
+           // this.Boxes.Add(barrier);
+
+            //create new map
+
+
+            this.player = new PlayerTank(this, 96, 96);
             this.GameObjects.Add(player);
 
-            this.GameObjects.Add(new EnemyTank(this, 16, 16));
+            this.GameObjects.Add(new EnemyTank(this, 200, 200));
             this.gameover = false;
         }
     }

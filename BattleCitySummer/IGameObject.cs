@@ -12,5 +12,7 @@ namespace BattleCitySummer
     {
         void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel);
         void Update(MainGame F);
+        void Destroy();
+        bool isDestroyed();
     }
 }

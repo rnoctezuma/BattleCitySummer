@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace BattleCitySummer
 {
@@ -8,8 +9,12 @@ namespace BattleCitySummer
     {
         GraphicsDeviceManager graphics;   //default graphics
         SpriteBatch spriteBatch; //graphics for sprites
-        //  public MainGame game = new MainGame();                where's right locate?
-     //   public Texture2D texture;
+        double nsPerFrame = 1000000000.0 / 120.0;
+        double unprocessedTime = 0;
+        double maxSkipFrames = 10;
+
+        long lastTime;// = System.nanoTime();
+        long lastFrameTime;// = System.currentTimeMillis();
 
         public Game1() //Load <=> WinForms
         {
@@ -43,12 +48,23 @@ namespace BattleCitySummer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-       //     this.game.Update();
-        //    BarrierCheck();
 
-            ScreenManager.Instance.Update(gameTime);
-            //UPDATE HERE
-            base.Update(gameTime);
+            long now = DateTime.Now.ToFileTime() * 100;
+            double passedTime = (now - lastTime) / nsPerFrame;
+            lastTime = now;
+
+            if (passedTime < -maxSkipFrames) passedTime = -maxSkipFrames;
+            if (passedTime > maxSkipFrames) passedTime = maxSkipFrames;
+
+            unprocessedTime += passedTime;
+            while (unprocessedTime > 1)
+            {
+                unprocessedTime--;
+                //UPDATE HERE
+                ScreenManager.Instance.Update(gameTime);
+                base.Update(gameTime);
+            }
+         //   base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)

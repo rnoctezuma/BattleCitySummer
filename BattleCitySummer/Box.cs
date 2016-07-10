@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace BattleCitySummer
         public Rectangle boxRect { get; set; }
 
         public bool Static;   
-        //   public bool destroy = false;
+        public bool destroy = false;
 
         public Box()
         {
@@ -84,6 +85,18 @@ namespace BattleCitySummer
             colliders.Clear();
             this.x += this.vx;
             this.y += this.vy;
+        }
+
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
+        {
+            DrawRectangle(new Rectangle((int)this.x - (int)this.width, (int)this.y - (int)this.height,
+                (int)this.width * 2, (int)this.height * 2), Color.Red, graphics, spriteBatch, texture);
+        }
+
+        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
+        {
+            texture.SetData(new[] { color });
+            spriteBatch.Draw(texture, coords, color);
         }
     }
 }
