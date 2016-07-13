@@ -49,3 +49,7 @@ D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\SharpDX.RawIn
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\SharpDX.Direct3D9.xml
 D:\Desktop\BattleCitySummer\BattleCitySummer\obj\x86\Debug\BattleCitySummer.csprojResolveAssemblyReference.cache
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\pixel.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\playerSprite.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\BulletSprite.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteEnemy.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\BrickWall.xnb

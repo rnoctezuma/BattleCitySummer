@@ -33,6 +33,7 @@ namespace BattleCitySummer
 
         protected override void LoadContent()
         {
+            
             spriteBatch = new SpriteBatch(GraphicsDevice);     
             //   this.game.Init();
             ScreenManager.Instance.LoadContent(Content);
@@ -48,7 +49,7 @@ namespace BattleCitySummer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+/*
             long now = DateTime.Now.ToFileTime() * 100;
             double passedTime = (now - lastTime) / nsPerFrame;
             lastTime = now;
@@ -63,14 +64,15 @@ namespace BattleCitySummer
                 //UPDATE HERE
                 ScreenManager.Instance.Update(gameTime);
                 base.Update(gameTime);
-            }
-         //   base.Update(gameTime);
+            }*/
+            ScreenManager.Instance.Update(gameTime);
+            base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.White);
-            spriteBatch.Begin();
+            GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             ScreenManager.Instance.Draw(spriteBatch, graphics);
             spriteBatch.End();
             base.Draw(gameTime);

@@ -10,25 +10,29 @@ namespace BattleCitySummer
 {
     public class EnemyTank : IGameObject
     {
-        public Box enemyBox { get; set; }
+        public Box box { get; set; }
         public int health { get; set; }
         public List<KeyValuePair<int, int>> wave = new List<KeyValuePair<int, int>>();  //note: wave normalize (wave.Key --, wave.Value --)
         public int[] playerPosition = new int[2];
         public bool destroy = false;
+        public Texture2D Sprite { get; set; }
+        private int frameWidth = 16;
+        private int frameHeight = 16;
+        private Point currentFrame = new Point(0, 0);
+        private Point spriteSize = new Point(4, 1);
 
-        public EnemyTank(MainGame F, int x, int y)
+        public EnemyTank(MainGame F, int x, int y, Texture2D Sprite)
         {
-            this.enemyBox = new Box(x, y, 16, 16, 0, 0, true);
-            health = 100;
-            // shoot = false;
-            // pos = 0;
-            F.Boxes.Add(this.enemyBox);
+            this.box = new Box(x, y, 16, 16, 0, 0, true);
+            health = 1;
+            this.Sprite = Sprite;
+            F.Boxes.Add(this.box);
         }
 
         public void Destroy()
         {
             destroy = true;
-            this.enemyBox.destroy = true;
+            this.box.destroy = true;
         }
 
         public bool isDestroyed()
@@ -36,12 +40,9 @@ namespace BattleCitySummer
             return destroy;
         }
 
-        public void Damage(int x)
+        public void Damage()
         {
-            if (health > 0)
-            {
-                health -= x;
-            }
+            this.Destroy();
         }
 
         public void Update(MainGame F)
@@ -74,6 +75,10 @@ namespace BattleCitySummer
                     {
                         generatedMap[i + 1, j + 1] = -1;
                     }
+                    else
+                    {
+                        generatedMap[i + 1, j + 1] = 9999;
+                    }
                 }
             }
             return generatedMap;
@@ -82,10 +87,10 @@ namespace BattleCitySummer
         public void FindOptimalPath(int[,] logicMap)
         {
             List<KeyValuePair<int, int>> Oldwave = new List<KeyValuePair<int, int>>();
-            Oldwave.Add(new KeyValuePair<int, int>((int)Math.Ceiling(enemyBox.x / 32d), (int)Math.Ceiling(enemyBox.y / 32d)));
+            Oldwave.Add(new KeyValuePair<int, int>((int)Math.Ceiling(box.x / 32d), (int)Math.Ceiling(box.y / 32d)));
 
             int nstep = 0;
-            logicMap[(int)Math.Ceiling(enemyBox.x / 32d), (int)Math.Ceiling(enemyBox.y / 32d)] = nstep;
+            logicMap[(int)Math.Ceiling(box.x / 32d), (int)Math.Ceiling(box.y / 32d)] = nstep;
             int[] dx = { 0, 1, 0, -1 };
             int[] dy = { -1, 0, 1, 0 };
             while (Oldwave.Count > 0)
@@ -139,53 +144,85 @@ namespace BattleCitySummer
         {
             PlayerTank player = F.player;
 
-            playerPosition[0] = (int)Math.Ceiling(player.playerBox.x / 32d);
-            playerPosition[1] = (int)Math.Ceiling(player.playerBox.y / 32d);
+            playerPosition[0] = (int)Math.Ceiling(player.box.x / 32d);
+            playerPosition[1] = (int)Math.Ceiling(player.box.y / 32d);
 
         }
 
         public void MoveToPlayer()
         {
-            int startX = wave[wave.Count - 1].Key - 1;
-            int startY = wave[wave.Count - 1].Value - 1;
-            double diffX = 0;
-            double diffY = 0;
+            double startX = (wave[wave.Count - 1].Key - 1)*32 + 16;
+            int startY = (wave[wave.Count - 1].Value - 1)*32 + 16;
+            double nextX = 0;
+            double nextY = 0;
+            bool axis = false; //false - x, true - y
             if (wave.Count != 1)
             {
-                diffX = (wave[wave.Count - 2].Key - 1) * 32 + 16 - this.enemyBox.x;
-                diffY = (wave[wave.Count - 2].Value - 1) * 32 + 16 - this.enemyBox.y;
+                double diffX = (wave[wave.Count - 2].Key - 1) * 32 + 16 - this.box.x;
+                double diffY = (wave[wave.Count - 2].Value - 1) * 32 + 16 - this.box.y;
+                nextX = (wave[wave.Count - 2].Key - 1) * 32 + 16;
+                nextY = (wave[wave.Count - 2].Value - 1) * 32 + 16;
 
-                if (Math.Abs(diffX) > Math.Abs(diffY) || Math.Abs(diffY)>1 && Math.Abs(diffY) > Math.Abs(diffX))
+                double distX = nextX - startX;
+                double distY = nextY - startY;
+                double angle = Math.Atan2(distY, distX);
+                if (angle > -0.3 && angle < 0.3)
                 {
-                    this.enemyBox.vy = diffY / Math.Abs(diffY) * 0.3;
-               //     this.enemyBox.vx = 0;
+                    axis = true;
+                    currentFrame.X = 3;
                 }
-
-               if (Math.Abs(diffX) < Math.Abs(diffY) || Math.Abs(diffX) > 1 && Math.Abs(diffY) < Math.Abs(diffX))
+                if (angle > Math.PI / 2 - 0.3 && angle < Math.PI / 2 + 0.3)
                 {
-                    this.enemyBox.vx = diffX / Math.Abs(diffX) * 0.3;
-               //     this.enemyBox.vy = 0;
+                    axis = false;
+                    currentFrame.X = 2;
                 }
-                
+                if (angle > Math.PI - 0.3 && angle < Math.PI + 0.3)
+                {
+                    axis = true;
+                    currentFrame.X = 1;
+                }
+                if (angle > 3 * Math.PI / 4 - 0.3 && angle < 3 * Math.PI / 4 + 0.3)
+                {
+                    axis = false;
+                    currentFrame.X = 0;   //????????? ne robit, need to fix
+                }
+                if (axis)
+                {
+                    if (Math.Abs(diffY) > 1)
+                    {
+                        this.box.vy = diffY / Math.Abs(diffY) * 0.3;
+                        this.box.vx = 0;
+                    }
+                    else
+                    {
+                        this.box.vx = diffX / Math.Abs(diffX) * 0.3;
+                        this.box.vy = 0;
+                    }
+                }
+                else
+                {
+                    if (Math.Abs(diffX)>1)
+                    {
+                        this.box.vx = diffX / Math.Abs(diffX) * 0.3;
+                        this.box.vy = 0;
+                    }
+                    else
+                    {
+                        this.box.vy = diffY / Math.Abs(diffY) * 0.3;
+                        this.box.vx = 0;
+                    }
+                }
             }
         }
 
-        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
+         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
         {
-            foreach (KeyValuePair<int, int> waveElement in wave)
-            {
-                DrawRectangle(new Rectangle((waveElement.Key - 1) * 512 / 16, (waveElement.Value - 1) * 512 / 16, 32, 32), Color.Green, graphics, spriteBatch, texture);
-            }
-            
-
-            DrawRectangle(new Rectangle((int)this.enemyBox.x - (int)this.enemyBox.width, (int)this.enemyBox.y - (int)this.enemyBox.height,
-                (int)this.enemyBox.width * 2, (int)this.enemyBox.height * 2), Color.Red, graphics, spriteBatch, texture);
-        }
-
-        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
-        {
-            texture.SetData(new[] { color });
-            spriteBatch.Draw(texture, coords, color);
+            spriteBatch.Draw(Sprite, new Vector2(((int)this.box.x - (int)this.box.width), (int)this.box.y - (int)this.box.height),
+                new Rectangle(currentFrame.X * frameWidth,
+                    currentFrame.Y * frameHeight,
+                    frameWidth, frameHeight),
+                Color.White, 0, Vector2.Zero,
+                2, SpriteEffects.None, 0);
         }
     }
 }

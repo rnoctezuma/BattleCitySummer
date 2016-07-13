@@ -14,12 +14,22 @@ namespace BattleCitySummer
         public Texture2D texture;
         public MainGame game = new MainGame();
         public Map map = new Map();
+        
 
         public override void LoadContent()
         {
             base.LoadContent();
+            this.game.Sprites.Add(content.Load<Texture2D>("PlayerSprite"));
+            this.game.Sprites.Add(content.Load<Texture2D>("BulletSprite"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpriteEnemy"));
+            this.game.Sprites.Add(content.Load<Texture2D>("BrickWall"));
             this.game.Init();
             texture = content.Load<Texture2D>("pixel");
+            
+            //    this.game.SetPlayerSprite(content.Load<Texture2D>("PlayerSprite"));
+            // this.game.SetBulletSprite(content.Load<Texture2D>("BulletSprite"));
+
+
         }
 
         public override void UnloadContent()
@@ -29,15 +39,14 @@ namespace BattleCitySummer
 
         public override void Update(GameTime gameTime)
         {
-            this.game.Update();
-         //   this.map.Update();
-
+             this.game.Update();
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
-            this.game.Draw(graphics, spriteBatch, texture);
-        //   this.map.Draw(graphics, spriteBatch, texture);
+               this.game.Draw(graphics, spriteBatch, texture);
+
         }
     }
 }

@@ -5,5 +5,9 @@
   <Config />
   <SourceFiles>
     <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/pixel.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/PlayerSprite.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/BulletSprite.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteEnemy.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/BrickWall.png</File>
   </SourceFiles>
 </SourceFileCollection>
