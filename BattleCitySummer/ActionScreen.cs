@@ -19,17 +19,16 @@ namespace BattleCitySummer
         public override void LoadContent()
         {
             base.LoadContent();
-            this.game.Sprites.Add(content.Load<Texture2D>("PlayerSprite"));
-            this.game.Sprites.Add(content.Load<Texture2D>("BulletSprite"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpritePlayer"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpriteBullet"));
             this.game.Sprites.Add(content.Load<Texture2D>("SpriteEnemy"));
             this.game.Sprites.Add(content.Load<Texture2D>("BrickWall"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpriteBase"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpriteExlosion1"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpriteExlosion2"));
+            this.game.Sprites.Add(content.Load<Texture2D>("SpriteIronWall"));
             this.game.Init();
             texture = content.Load<Texture2D>("pixel");
-            
-            //    this.game.SetPlayerSprite(content.Load<Texture2D>("PlayerSprite"));
-            // this.game.SetBulletSprite(content.Load<Texture2D>("BulletSprite"));
-
-
         }
 
         public override void UnloadContent()
@@ -39,7 +38,7 @@ namespace BattleCitySummer
 
         public override void Update(GameTime gameTime)
         {
-             this.game.Update();
+             this.game.Update(gameTime);
             
         }
 

@@ -14,7 +14,6 @@ namespace BattleCitySummer
         double maxSkipFrames = 10;
 
         long lastTime;// = System.nanoTime();
-        long lastFrameTime;// = System.currentTimeMillis();
 
         public Game1() //Load <=> WinForms
         {
@@ -49,7 +48,7 @@ namespace BattleCitySummer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-/*
+
             long now = DateTime.Now.ToFileTime() * 100;
             double passedTime = (now - lastTime) / nsPerFrame;
             lastTime = now;
@@ -64,9 +63,7 @@ namespace BattleCitySummer
                 //UPDATE HERE
                 ScreenManager.Instance.Update(gameTime);
                 base.Update(gameTime);
-            }*/
-            ScreenManager.Instance.Update(gameTime);
-            base.Update(gameTime);
+            }
         }
 
         protected override void Draw(GameTime gameTime)

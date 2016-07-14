@@ -39,16 +39,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ActionScreen.cs" />
+    <Compile Include="GameObjects\Base.cs" />
     <Compile Include="Box.cs" />
-    <Compile Include="BrickWall.cs" />
-    <Compile Include="Bullet.cs" />
-    <Compile Include="EnemyTank.cs" />
+    <Compile Include="GameObjects\BrickWall.cs" />
+    <Compile Include="GameObjects\Bullet.cs" />
+    <Compile Include="GameObjects\EnemyTank.cs" />
+    <Compile Include="GameObjects\Explosion.cs" />
     <Compile Include="GameScreen.cs" />
+    <Compile Include="GameObjects\IronWall.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="IGameObject.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="PlayerTank.cs" />
+    <Compile Include="GameObjects\PlayerTank.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenManager.cs" />

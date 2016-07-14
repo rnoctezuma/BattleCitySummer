@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/BulletSprite.png</SourceFile>
-  <SourceTime>2016-07-12T20:50:15.9853214+03:00</SourceTime>
-  <DestFile>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/bin/Windows/BulletSprite.xnb</DestFile>
-  <DestTime>2016-07-12T20:50:42.2351892+03:00</DestTime>
+  <SourceFile>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteIronWall.png</SourceFile>
+  <SourceTime>2016-07-14T02:12:00.873851+03:00</SourceTime>
+  <DestFile>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/bin/Windows/SpriteIronWall.xnb</DestFile>
+  <DestTime>2016-07-14T02:12:25.6539691+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T09:36:08+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

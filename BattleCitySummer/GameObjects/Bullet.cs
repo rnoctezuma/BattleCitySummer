@@ -13,14 +13,15 @@ namespace BattleCitySummer
         public Box box;
         public bool destroy = false;
         public IGameObject parent = null;
+        private int pos = 0;
         public Texture2D Sprite { get; set; }
-        private int frameWidth = 8;
-        private int frameHeight = 8;
+        private int frameWidth = 7;
+        private int frameHeight = 7;
         private Point currentFrame = new Point(0, 0);
         private Point spriteSize = new Point(4, 1);
         public Bullet(MainGame F, double x, double y, double vx, double vy, IGameObject parent, Texture2D Sprite)
         {
-            this.box = new Box(x, y, 2, 2, vx, vy, false);
+            this.box = new Box(x, y, 6, 6, vx, vy, false);
             this.parent = parent;
             this.Sprite = Sprite;
             F.Boxes.Add(this.box);
@@ -34,44 +35,90 @@ namespace BattleCitySummer
         {
             return destroy;
         }
-        public void Update(MainGame F)
+        public void Update(MainGame mainGame, GameTime gameTime)
         {
             double angle = Math.Atan2(this.box.vy, this.box.vx);
 
             if (angle > -0.3 && angle < 0.3)
+            {
                 currentFrame.X = 3;
+                pos = 0;
+            }
             if (angle > Math.PI / 2 - 0.3 && angle < Math.PI / 2 + 0.3)
+            {
                 currentFrame.X = 2;
+                pos = 1;
+            }
             if (angle > Math.PI - 0.3 && angle < Math.PI + 0.3)
+            {
                 currentFrame.X = 1;
-            if (angle > 3 * Math.PI / 4 - 0.3 && angle < 3 * Math.PI / 4 + 0.3)
+                pos = 2;
+            }
+            if (angle > -Math.PI / 2 - 0.3 && angle < -Math.PI / 2 + 0.3)
+            {
                 currentFrame.X = 0;
+                pos = 3;
+            }
 
             EnemyTank enemyTank = null;
             PlayerTank playerTank = null;
-
-            foreach (IGameObject S in F.GameObjects)
+            BrickWall brickWall = null;
+            IronWall ironWall = null;
+            bool explosion = false;
+            foreach (IGameObject gameObject in mainGame.GameObjects)
             {
-                if (S.GetType() == typeof(EnemyTank))
+                if (gameObject.GetType() == typeof(EnemyTank) && gameObject.GetType() != parent.GetType())
                 {
-                    enemyTank = (EnemyTank)S;
+                    enemyTank = (EnemyTank)gameObject;
                     if (this.box.colliders.Contains(enemyTank.box))
                     {
+                        explosion = true;
                         enemyTank.Damage();
                         this.Destroy();
                     }
                 }
-                if (S.GetType() == typeof(PlayerTank))
+                else
                 {
-                    playerTank = (PlayerTank)S;
-                    if (this.box.colliders.Contains(playerTank.box))
+                    if (gameObject.GetType() == typeof(PlayerTank) && gameObject.GetType() != parent.GetType())
                     {
-                        playerTank.Damage();
-                        this.Destroy();
+                        playerTank = (PlayerTank)gameObject;
+                        if (this.box.colliders.Contains(playerTank.box))
+                        {
+                            explosion = true;
+                            playerTank.Damage();
+                            this.Destroy();
+                        }
+                    }
+                    else
+                    {
+                        if (gameObject.GetType() == typeof(BrickWall))
+                        {
+                            brickWall = (BrickWall)gameObject;
+                            if (this.box.colliders.Contains(brickWall.box))
+                            {
+
+                                explosion = true;
+                                brickWall.Destroy();
+                                this.Destroy();
+
+                            }
+                        }
+                        else
+                        {
+                            if (gameObject.GetType() == typeof(IronWall))
+                            {
+                                ironWall = (IronWall)gameObject;
+                                if (this.box.colliders.Contains(ironWall.box))
+                                {
+                                    explosion = true;
+                                    this.Destroy();
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        /*        }
+                
+                /*
                 else
                 {
                     if (S.GetType() == typeof(Player) && S.GetType() != parent.GetType())
@@ -120,34 +167,50 @@ namespace BattleCitySummer
                     }
                 }
             }*/
+            }
+
+
+            if (explosion)
+                MakeExplosion(mainGame);            
         }
 
-        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
-        {/*
-            DrawRectangle(new Rectangle((int)this.bulletBox.x - (int)this.bulletBox.width, (int)this.bulletBox.y - (int)this.bulletBox.height,
-                (int)this.bulletBox.width * 2, (int)this.bulletBox.height * 2), Color.Green, graphics, spriteBatch, pixel);*/
+        public void MakeExplosion(MainGame mainGame)
+        {
+            if (pos == 0)
+            {
+                mainGame.GameObjects.Add(new Explosion(this.box.x + 5, this.box.y - 2,
+                    mainGame.Sprites[5], mainGame.Sprites[6]));                
+            }
+            if (pos == 2)
+            {
+                mainGame.GameObjects.Add(new Explosion(this.box.x - 20, this.box.y - 2,
+                    mainGame.Sprites[5], mainGame.Sprites[6]));        
+            }
+            if (pos == 1)
+            {
+                mainGame.GameObjects.Add(new Explosion(this.box.x-5, this.box.y + 5,
+                    mainGame.Sprites[5], mainGame.Sprites[6]));                
+            }
+            if (pos == 3)
+            {
+                mainGame.GameObjects.Add(new Explosion(this.box.x - 9, this.box.y - 12,
+                    mainGame.Sprites[5], mainGame.Sprites[6]));
+            }
+        }
 
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
+        {
+            
+        //    DrawRectangle(new Rectangle((int)this.box.x - (int)this.box.width, (int)this.box.y - (int)this.box.height,
+         //       (int)this.box.width * 2, (int)this.box.height * 2), Color.White, graphics, spriteBatch, texture);
+            
             spriteBatch.Draw(Sprite, new Vector2(((int)this.box.x - (int)this.box.width), (int)this.box.y - (int)this.box.height),
                 new Rectangle(currentFrame.X * frameWidth,
                     currentFrame.Y * frameHeight,
                     frameWidth, frameHeight),
                 Color.White, 0, Vector2.Zero,
                 2, SpriteEffects.None, 0);
-
-
-/*
-            spriteBatch.Draw(texture, Vector2.Zero,
-new Rectangle(currentFrame.X * frameWidth,
-currentFrame.Y * frameHeight,
-frameWidth, frameHeight),
-Color.White, 0, Vector2.Zero,
-1, SpriteEffects.None, 0);*/
-        }
-
-        public void DrawRectangle(Rectangle coords, Color color, GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
-        {
-            pixel.SetData(new[] { color });
-            spriteBatch.Draw(pixel, coords, color);
+            
         }
     }
 }

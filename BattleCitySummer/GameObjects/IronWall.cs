@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace BattleCitySummer
 {
-    public class BrickWall : IGameObject
+    public class IronWall : IGameObject
     {
         public Box box;
         public Texture2D Sprite { get; set; }
-        private int frameWidth = 8;
-        private int frameHeight = 8;
+        private int frameWidth = 16;
+        private int frameHeight = 16;
         private Point currentFrame = new Point(0, 0);
-        private Point spriteSize = new Point(4, 1);
+        private Point spriteSize = new Point(1, 1);
         public bool destroy = false;
 
-        public BrickWall(MainGame F, double x, double y, double w, double h, Texture2D Sprite)
+        public IronWall(MainGame F, double x, double y, double w, double h, Texture2D Sprite)
         {
             this.box = new Box(x, y, w, h, 0, 0, true);
             this.Sprite = Sprite;
@@ -33,11 +33,11 @@ namespace BattleCitySummer
             destroy = true;
             this.box.destroy = true;
         }
-        public void Update(MainGame F)
+        public void Update(MainGame F, GameTime gameTime)
         {
         }
 
-        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Sprite, new Vector2(((int)this.box.x - (int)this.box.width), (int)this.box.y - (int)this.box.height),
                 new Rectangle(currentFrame.X * frameWidth,

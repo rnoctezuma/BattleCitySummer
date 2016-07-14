@@ -47,21 +47,21 @@ namespace BattleCitySummer
             double aH = this.height + box.height;
 
             if (Math.Abs(ax) > aW)         //если пересечения нет
-            { return false; }              //
+                return false;               //
             if (Math.Abs(ay) > aH)         //
-            { return false; }              //
+                return false;              //
             if (ax < 0)
-            { dx = -ax - aW; }
+                dx = -ax - aW;
             else
-            { dx = aW - ax; }  //насколько заходит одна коробка в другую по y
+                dx = aW - ax;  //насколько заходит одна коробка в другую по y
             if (ay < 0)        //и по x
-            { dy = -ay - aH; }
+                dy = -ay - aH;
             else
-            { dy = aH - ay; }
+                dy = aH - ay;
             if (Math.Abs(dx) < Math.Abs(dy))
-            { dy = 0; }
+                dy = 0;
             else
-            { dx = 0; }
+                dx = 0;
             return true;
         }
 

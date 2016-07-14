@@ -15,7 +15,7 @@ namespace BattleCitySummer
         public List<Texture2D> Sprites = new List<Texture2D>();
         public PlayerTank player = null;
         public Map map;
-        private Box barrier = new Box(288, 288, 285, 285, 0, 0, false);
+        public Box barrier = new Box(288, 288, 277, 277, 0, 0, false);
         public bool gameover { get; set; }
 
         public void Clear()
@@ -24,22 +24,17 @@ namespace BattleCitySummer
             this.Boxes.Clear();
         }
 
+
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D texture)
         {
 
-            foreach (IGameObject S in GameObjects)
+            foreach (IGameObject gameObject in GameObjects)
             {
-                S.Draw(graphics, spriteBatch, texture);
+                gameObject.Draw(graphics, spriteBatch);
             }
-            /*
-
-               foreach (Box S in Boxes)
-               {
-                   S.Draw(graphics, spriteBatch, texture);
-               }*/
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             foreach (Box box in Boxes)
             {
@@ -61,14 +56,9 @@ namespace BattleCitySummer
                             Boxes[j].Collide(Boxes[i], -dx, -dy);
                             Boxes[i].Collide(Boxes[j], 0, 0);
                         }
-                        else if (!Boxes[i].Static && Boxes[j].Static) //тоже самое но для j,i
+                        else if (!Boxes[i].Static && Boxes[j].Static || !Boxes[i].Static && !Boxes[j].Static) //тоже самое но для j,i
                         {
                             Boxes[i].Collide(Boxes[j], dx, dy);
-                            Boxes[j].Collide(Boxes[i], 0, 0);
-                        }
-                        else
-                        {
-                            Boxes[i].Collide(Boxes[j], 0, 0);  //две динамические коробки, фиксир. пересечение и добавляются в списки colliders
                             Boxes[j].Collide(Boxes[i], 0, 0);
                         }
                     }
@@ -77,10 +67,9 @@ namespace BattleCitySummer
 
             double tmp = 0;
             EnemyTank enemyTank = null;
-
             for (int i = 0; i < GameObjects.Count; i++)
             {
-                GameObjects[i].Update(this);
+                GameObjects[i].Update(this, gameTime);
                 if (GameObjects[i].GetType() == typeof(Bullet))
                 {
                     if (!((Bullet)GameObjects[i]).box.Collides(barrier, ref tmp, ref tmp)) //если не внутри барьера
@@ -88,6 +77,7 @@ namespace BattleCitySummer
                         GameObjects[i].Destroy();
                     }
                 }
+
                 if (GameObjects[i].GetType() == typeof(EnemyTank))   //обнуление скорости вражеского танка при столкновении с игроком
                 {
                     enemyTank = (EnemyTank)GameObjects[i];
@@ -98,6 +88,7 @@ namespace BattleCitySummer
                     }
                 }
             }
+            
 
             //GarbageCollect
             for (int i = 0; i < GameObjects.Count; i++) //удаление всех игровых коробок и объектов которые должны быть удалены
@@ -140,7 +131,7 @@ namespace BattleCitySummer
             this.player = new PlayerTank(this, 96, 96, Sprites[0]);
             this.GameObjects.Add(player);
 
-            this.GameObjects.Add(new EnemyTank(this, 100, 200, Sprites[2]));
+           // this.GameObjects.Add(new EnemyTank(this, 100, 200, Sprites[2]));
             this.gameover = false;
         }
 
@@ -157,8 +148,17 @@ namespace BattleCitySummer
                         this.GameObjects.Add(new BrickWall(this, i * 32 + 8, j * 32 + 24, 8, 8, Sprites[3]));
                         this.GameObjects.Add(new BrickWall(this, i * 32 + 24, j * 32 + 24, 8, 8, Sprites[3]));
                     }
+                    if (map.map[i, j] == 9)
+                    {
+                        this.GameObjects.Add(new Base(this, i * 32 + 16, j * 32 + 16, 16, 16, Sprites[4]));
+                    }
+                    if (map.map[i,j] == 2)
+                    {
+                        this.GameObjects.Add(new IronWall(this, i * 32 + 16, j * 32 + 16, 16, 16, Sprites[7]));
+                    }
                 }
             }
+            
         }
     }
 }

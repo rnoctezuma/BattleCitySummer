@@ -13,17 +13,23 @@ namespace BattleCitySummer
         public Box box { get; set; }
         public int health { get; set; }
         public List<KeyValuePair<int, int>> wave = new List<KeyValuePair<int, int>>();  //note: wave normalize (wave.Key --, wave.Value --)
-        public int[] playerPosition = new int[2];
+        private int[] TargerPosition = new int[2];
+        private int chooseTargetPosition = 0;
         public bool destroy = false;
-        public Texture2D Sprite { get; set; }
+        private double randTimer = 10;
+        private double animation = 0;
+        private Texture2D Sprite { get; set; }
         private int frameWidth = 16;
         private int frameHeight = 16;
         private Point currentFrame = new Point(0, 0);
-        private Point spriteSize = new Point(4, 1);
+        private Point spriteSize = new Point(8, 1);
+        private Random rand = new Random();
+
+        
 
         public EnemyTank(MainGame F, int x, int y, Texture2D Sprite)
         {
-            this.box = new Box(x, y, 16, 16, 0, 0, true);
+            this.box = new Box(x, y, 14, 14, 0, 0, false);
             health = 1;
             this.Sprite = Sprite;
             F.Boxes.Add(this.box);
@@ -45,14 +51,63 @@ namespace BattleCitySummer
             this.Destroy();
         }
 
-        public void Update(MainGame F)
+        public void Update(MainGame mainGame, GameTime gameTime)
         {
-            int[,] logicMap = GetLogicMap(F.map.map);
-            SearchPlayersPosition(F);
-            FindOptimalPath(logicMap);
-            MoveToPlayer();
-        }
+     /*       if (testSpawn == 1)
+            {
+                EnemySpawn(mainGame);
+                testSpawn = 0;
+            }
+            */
+            int[,] logicMap = GetLogicMap(mainGame.map.map);
+            /*   
+                    if (gameTime.TotalGameTime.TotalSeconds <= 20)
+                    {
+                        if (randTimer >= 10)
+                        {
+                            RandomMove();
+                            randTimer = 0;
 
+                        }
+                    }
+                    */
+            //     if (gameTime.TotalGameTime.TotalSeconds > 20 && gameTime.TotalGameTime.TotalSeconds <= 50)
+    /*        {
+                SearchTargetPosition(mainGame);
+                FindOptimalPath(logicMap);
+                MoveToTarget();
+            }
+      */      
+
+       //     if (gameTime.TotalGameTime.TotalSeconds > 50)
+ /*           {
+                chooseTargetPosition = 1;
+                SearchTargetPosition(mainGame);
+                FindOptimalPath(logicMap);
+                MoveToTarget();
+            }
+            if (randTimer < 11)
+            {
+                randTimer += 0.1;
+            }
+            
+*/
+            double angle = Math.Atan2(this.box.vy, this.box.vx);      //V METODU POTOM
+
+            if (angle > -0.3 && angle < 0.3)
+                currentFrame.X = 3;
+            if (angle > Math.PI / 2 - 0.3 && angle < Math.PI / 2 + 0.3)
+                currentFrame.X = 2;
+            if (angle > Math.PI - 0.3 && angle < Math.PI + 0.3)
+                currentFrame.X = 1;
+            if (angle > -Math.PI / 2 - 0.3 && angle < -Math.PI / 2 + 0.3)
+                currentFrame.X = 0;
+
+            if (Math.Abs(this.box.vx) > 0 || Math.Abs(this.box.vy) > 0)
+                this.animation += 0.1;
+            if (this.animation >= 2)
+                this.animation = 0;
+        }
 
 
         public int[,] GetLogicMap(int[,] map)
@@ -108,7 +163,7 @@ namespace BattleCitySummer
                         {
                             wave.Add(new KeyValuePair<int, int>(nx, ny));
                             logicMap[nx, ny] = nstep;
-                            if (nx == playerPosition[0] && ny == playerPosition[1])
+                            if (nx == TargerPosition[0] && ny == TargerPosition[1])
                             {
                                 goto done;
                             }
@@ -119,8 +174,8 @@ namespace BattleCitySummer
                 Oldwave.AddRange(wave);
             }
         done:;
-            int x = playerPosition[0];
-            int y = playerPosition[1];
+            int x = TargerPosition[0];
+            int y = TargerPosition[1];
             wave.Clear();
             wave.Add(new KeyValuePair<int, int>(x, y));
             while (logicMap[x, y] != 0)
@@ -140,19 +195,24 @@ namespace BattleCitySummer
             }
         }
 
-        public void SearchPlayersPosition(MainGame F)
+        public void SearchTargetPosition(MainGame mainGame)
         {
-            PlayerTank player = F.player;
-
-            playerPosition[0] = (int)Math.Ceiling(player.box.x / 32d);
-            playerPosition[1] = (int)Math.Ceiling(player.box.y / 32d);
-
+            if (chooseTargetPosition == 0)
+            {
+                TargerPosition[0] = (int)Math.Ceiling(mainGame.player.box.x / 32d);
+                TargerPosition[1] = (int)Math.Ceiling(mainGame.player.box.y / 32d);
+            }
+            else
+            {
+                TargerPosition[0] = 9;
+                TargerPosition[1] = 16;
+            }
         }
 
-        public void MoveToPlayer()
+        public void MoveToTarget()
         {
-            double startX = (wave[wave.Count - 1].Key - 1)*32 + 16;
-            int startY = (wave[wave.Count - 1].Value - 1)*32 + 16;
+            double startX = (wave[wave.Count - 1].Key - 1) * 32 + 16;
+            int startY = (wave[wave.Count - 1].Value - 1) * 32 + 16;
             double nextX = 0;
             double nextY = 0;
             bool axis = false; //false - x, true - y
@@ -167,58 +227,100 @@ namespace BattleCitySummer
                 double distY = nextY - startY;
                 double angle = Math.Atan2(distY, distX);
                 if (angle > -0.3 && angle < 0.3)
-                {
                     axis = true;
-                    currentFrame.X = 3;
-                }
                 if (angle > Math.PI / 2 - 0.3 && angle < Math.PI / 2 + 0.3)
-                {
                     axis = false;
-                    currentFrame.X = 2;
-                }
                 if (angle > Math.PI - 0.3 && angle < Math.PI + 0.3)
-                {
                     axis = true;
-                    currentFrame.X = 1;
-                }
                 if (angle > 3 * Math.PI / 4 - 0.3 && angle < 3 * Math.PI / 4 + 0.3)
-                {
                     axis = false;
-                    currentFrame.X = 0;   //????????? ne robit, need to fix
-                }
                 if (axis)
                 {
                     if (Math.Abs(diffY) > 1)
                     {
-                        this.box.vy = diffY / Math.Abs(diffY) * 0.3;
+                        this.box.vy = diffY / Math.Abs(diffY) * 0.6;
                         this.box.vx = 0;
                     }
                     else
                     {
-                        this.box.vx = diffX / Math.Abs(diffX) * 0.3;
+                        this.box.vx = diffX / Math.Abs(diffX) * 0.6;
                         this.box.vy = 0;
                     }
                 }
                 else
                 {
-                    if (Math.Abs(diffX)>1)
+                    if (Math.Abs(diffX) > 1)
                     {
-                        this.box.vx = diffX / Math.Abs(diffX) * 0.3;
+                        this.box.vx = diffX / Math.Abs(diffX) * 0.6;
                         this.box.vy = 0;
                     }
                     else
                     {
-                        this.box.vy = diffY / Math.Abs(diffY) * 0.3;
+                        this.box.vy = diffY / Math.Abs(diffY) * 0.6;
                         this.box.vx = 0;
                     }
                 }
             }
         }
 
-         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch, Texture2D pixel)
+        public void RandomMove()
         {
-            spriteBatch.Draw(Sprite, new Vector2(((int)this.box.x - (int)this.box.width), (int)this.box.y - (int)this.box.height),
-                new Rectangle(currentFrame.X * frameWidth,
+            int direction = rand.Next(0, 100);
+            if (direction >= 0 && direction <= 24)
+            {
+                this.box.vx = -0.6;
+                this.box.vy = 0;
+            }
+            if (direction > 24 && direction <= 49)
+            {
+                this.box.vx = 0.6;
+                this.box.vy = 0;
+            }
+            if (direction > 49 && direction <= 74)
+            {
+                this.box.vy = -0.6;
+                this.box.vx = 0;
+            }
+            if (direction > 74)
+            {
+                this.box.vy = 0.6;
+                this.box.vx = 0;
+            }
+        }
+
+        public void EnemySpawn(MainGame mainGame)
+        {
+            /*
+            int spawnPos = rand.Next(0, 18);
+            int leftRight = rand.Next(0, 2);
+            int playerPosX = (int)Math.Floor(mainGame.player.box.x / 32d);
+            int playerPosY = (int)Math.Floor(mainGame.player.box.y / 32d);
+            if (playerPosY == 0)
+            {
+                if (playerPosX == spawnPos)
+                {
+                    if (playerPosX == 0)
+                        spawnPos = rand.Next(1, 18);
+                    else if (playerPosX == 17)
+                        spawnPos = rand.Next(0, 17);
+                    else if(playerPosX != 0 && playerPosX != 17)
+                    {
+                        if (leftRight == 0)
+                            spawnPos = rand.Next(0, playerPosX);
+                        else
+                            spawnPos = rand.Next(playerPosX + 1, 18);
+                    }
+                }
+            }
+            */
+            mainGame.GameObjects.Add(new EnemyTank(mainGame, 100, 200, mainGame.Sprites[2]));
+        }
+
+
+        public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Sprite, new Vector2(((int)this.box.x - (int)this.box.width - 1), (int)this.box.y - (int)this.box.height - 1),
+                new Rectangle((currentFrame.X * 2 + (int)animation) * frameWidth,
                     currentFrame.Y * frameHeight,
                     frameWidth, frameHeight),
                 Color.White, 0, Vector2.Zero,
