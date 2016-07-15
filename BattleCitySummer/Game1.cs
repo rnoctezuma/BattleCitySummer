@@ -60,7 +60,6 @@ namespace BattleCitySummer
             while (unprocessedTime > 1)
             {
                 unprocessedTime--;
-                //UPDATE HERE
                 ScreenManager.Instance.Update(gameTime);
                 base.Update(gameTime);
             }

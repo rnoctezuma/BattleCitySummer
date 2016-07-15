@@ -57,3 +57,6 @@ D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\Sprit
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteExlosion2.xnb
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteBullet.xnb
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteIronWall.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteMenu.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteSpawnEnemy.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Debug\Content\SpriteSpawnPlayer.xnb

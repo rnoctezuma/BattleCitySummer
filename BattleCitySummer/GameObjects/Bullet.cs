@@ -64,153 +64,105 @@ namespace BattleCitySummer
             PlayerTank playerTank = null;
             BrickWall brickWall = null;
             IronWall ironWall = null;
-            bool explosion = false;
-            foreach (IGameObject gameObject in mainGame.GameObjects)
+            Base basePlayer = null;
+            for (int i = 0; i < mainGame.GameObjects.Count; i++)
             {
-                if (gameObject.GetType() == typeof(EnemyTank) && gameObject.GetType() != parent.GetType())
+                if (mainGame.GameObjects[i].GetType() == typeof(EnemyTank) && mainGame.GameObjects[i].GetType() != parent.GetType())
                 {
-                    enemyTank = (EnemyTank)gameObject;
+                    enemyTank = (EnemyTank)mainGame.GameObjects[i];
                     if (this.box.colliders.Contains(enemyTank.box))
                     {
-                        explosion = true;
-                        enemyTank.Damage();
+                        MakeExplosion(mainGame, 1);
+                        enemyTank.Destroy();
+                        mainGame.tankCounter--;
+                        mainGame.player.addScore();
                         this.Destroy();
                     }
                 }
-                else
+                if (mainGame.GameObjects[i].GetType() == typeof(PlayerTank) && mainGame.GameObjects[i].GetType() != parent.GetType())
                 {
-                    if (gameObject.GetType() == typeof(PlayerTank) && gameObject.GetType() != parent.GetType())
+                    playerTank = (PlayerTank)mainGame.GameObjects[i];
+                    if (this.box.colliders.Contains(playerTank.box))
                     {
-                        playerTank = (PlayerTank)gameObject;
-                        if (this.box.colliders.Contains(playerTank.box))
-                        {
-                            explosion = true;
-                            playerTank.Damage();
-                            this.Destroy();
-                        }
-                    }
-                    else
-                    {
-                        if (gameObject.GetType() == typeof(BrickWall))
-                        {
-                            brickWall = (BrickWall)gameObject;
-                            if (this.box.colliders.Contains(brickWall.box))
-                            {
-
-                                explosion = true;
-                                brickWall.Destroy();
-                                this.Destroy();
-
-                            }
-                        }
-                        else
-                        {
-                            if (gameObject.GetType() == typeof(IronWall))
-                            {
-                                ironWall = (IronWall)gameObject;
-                                if (this.box.colliders.Contains(ironWall.box))
-                                {
-                                    explosion = true;
-                                    this.Destroy();
-                                }
-                            }
-                        }
+                        MakeExplosion(mainGame, 1);
+                        this.Destroy();
+                        playerTank.health--;
+                        playerTank.newPlayerSpawn();
+                        mainGame.GameObjects.Add(new Explosion(playerTank.box.x, playerTank.box.y,
+                               mainGame.Sprites[5], mainGame.Sprites[6], mainGame.Sprites[8], mainGame.Sprites[9], 2));
                     }
                 }
-                
-                /*
-                else
+                if (mainGame.GameObjects[i].GetType() == typeof(BrickWall))
                 {
-                    if (S.GetType() == typeof(Player) && S.GetType() != parent.GetType())
+                    brickWall = (BrickWall)mainGame.GameObjects[i];
+                    if (this.box.colliders.Contains(brickWall.box))
                     {
-                        P = (Player)S;
-                        if (this.box.colliders.Contains(P.box))
-                        {
-                            P.Damage(5);
-                            Destroy();
-                        }
-                    }
-                    else
-                    {
-                        if (S.GetType() == typeof(Wall))
-                        {
-                            W = (Wall)S;
-                            if (this.box.colliders.Contains(W.box))
-                            {
-                                Destroy();
-                            }
-                        }
-                        else
-                        {
-                            if (S.GetType() == typeof(Door))
-                            {
-                                D = (Door)S;
-                                if (this.box.colliders.Contains(D.box) && D.active)
-                                {
-                                    Destroy();
-                                    D.Damage(1);
-                                }
-                            }
-                            else
-                            {
-                                if (S.GetType() == typeof(Meth))
-                                {
-                                    M = (Meth)S;
-                                    if (this.box.colliders.Contains(M.box))
-                                    {
-                                        Destroy();
-                                        M.Damage(10);
-                                    }
-                                }
-                            }
-                        }
+
+                        MakeExplosion(mainGame, 0);
+                        brickWall.Destroy();
+                        int brickMapPosX = (int)Math.Floor(brickWall.box.x / 32d);
+                        int brickMapPosY = (int)Math.Floor(brickWall.box.y / 32d);
+                        mainGame.map.gameMap[brickMapPosX, brickMapPosY] = 0;
+                        this.Destroy();
+
                     }
                 }
-            }*/
+
+                if (mainGame.GameObjects[i].GetType() == typeof(IronWall))
+                {
+                    ironWall = (IronWall)mainGame.GameObjects[i];
+                    if (this.box.colliders.Contains(ironWall.box))
+                    {
+                        MakeExplosion(mainGame, 0);
+                        this.Destroy();
+                    }
+                }
+
+                if (mainGame.GameObjects[i].GetType() == typeof(Base))
+                {
+                    basePlayer = (Base)mainGame.GameObjects[i];
+                    if (this.box.colliders.Contains(basePlayer.box))
+                    {
+                        MakeExplosion(mainGame, 1);
+                        basePlayer.Damage();
+                        this.Destroy();
+                    }
+                }
             }
-
-
-            if (explosion)
-                MakeExplosion(mainGame);            
         }
 
-        public void MakeExplosion(MainGame mainGame)
+        public void MakeExplosion(MainGame mainGame, int chooseExplosion)
         {
             if (pos == 0)
             {
                 mainGame.GameObjects.Add(new Explosion(this.box.x + 5, this.box.y - 2,
-                    mainGame.Sprites[5], mainGame.Sprites[6]));                
+                    mainGame.Sprites[5], mainGame.Sprites[6], mainGame.Sprites[8], mainGame.Sprites[9], chooseExplosion));
             }
             if (pos == 2)
             {
                 mainGame.GameObjects.Add(new Explosion(this.box.x - 20, this.box.y - 2,
-                    mainGame.Sprites[5], mainGame.Sprites[6]));        
+                    mainGame.Sprites[5], mainGame.Sprites[6], mainGame.Sprites[8], mainGame.Sprites[9], chooseExplosion));
             }
             if (pos == 1)
             {
-                mainGame.GameObjects.Add(new Explosion(this.box.x-5, this.box.y + 5,
-                    mainGame.Sprites[5], mainGame.Sprites[6]));                
+                mainGame.GameObjects.Add(new Explosion(this.box.x - 5, this.box.y + 5,
+                    mainGame.Sprites[5], mainGame.Sprites[6], mainGame.Sprites[8], mainGame.Sprites[9], chooseExplosion));
             }
             if (pos == 3)
             {
                 mainGame.GameObjects.Add(new Explosion(this.box.x - 9, this.box.y - 12,
-                    mainGame.Sprites[5], mainGame.Sprites[6]));
+                    mainGame.Sprites[5], mainGame.Sprites[6], mainGame.Sprites[8], mainGame.Sprites[9], chooseExplosion));
             }
         }
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
         {
-            
-        //    DrawRectangle(new Rectangle((int)this.box.x - (int)this.box.width, (int)this.box.y - (int)this.box.height,
-         //       (int)this.box.width * 2, (int)this.box.height * 2), Color.White, graphics, spriteBatch, texture);
-            
             spriteBatch.Draw(Sprite, new Vector2(((int)this.box.x - (int)this.box.width), (int)this.box.y - (int)this.box.height),
                 new Rectangle(currentFrame.X * frameWidth,
                     currentFrame.Y * frameHeight,
                     frameWidth, frameHeight),
                 Color.White, 0, Vector2.Zero,
                 2, SpriteEffects.None, 0);
-            
         }
     }
 }

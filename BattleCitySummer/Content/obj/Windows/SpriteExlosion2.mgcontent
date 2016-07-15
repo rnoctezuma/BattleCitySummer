@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteExlosion2.png</SourceFile>
-  <SourceTime>2016-07-13T23:20:01.4560041+03:00</SourceTime>
+  <SourceTime>2016-07-14T23:59:02.5168551+03:00</SourceTime>
   <DestFile>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/bin/Windows/SpriteExlosion2.xnb</DestFile>
-  <DestTime>2016-07-13T23:35:08.3702876+03:00</DestTime>
+  <DestTime>2016-07-15T04:36:04.7061202+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T09:36:08+03:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

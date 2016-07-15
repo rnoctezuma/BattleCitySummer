@@ -27,11 +27,12 @@ namespace BattleCitySummer
                 return instance;             
             }
         }
+        
 
         public ScreenManager()
         {
             Dimensions = new Vector2(576, 576);
-            currentScreen = new ActionScreen();
+            currentScreen = new MenuScreen();
         }
 
         public void LoadContent(ContentManager Content)
@@ -53,6 +54,13 @@ namespace BattleCitySummer
         public void Draw(SpriteBatch spriteBatch, GraphicsDeviceManager graphics)
         {
             currentScreen.Draw(spriteBatch, graphics);
+        }
+
+        public void ChangeScreen(GameScreen newScreen)
+        {
+            this.currentScreen.UnloadContent();
+            this.currentScreen = newScreen;
+            currentScreen.LoadContent();
         }
     }
 }

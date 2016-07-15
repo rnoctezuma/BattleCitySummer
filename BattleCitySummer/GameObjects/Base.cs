@@ -12,6 +12,7 @@ namespace BattleCitySummer
     {
         public Box box;
         public Texture2D Sprite { get; set; }
+        public int health = 2;
         private int frameWidth = 16;
         private int frameHeight = 16;
         private Point currentFrame = new Point(0, 0);
@@ -33,8 +34,18 @@ namespace BattleCitySummer
             destroy = true;
             this.box.destroy = true;
         }
-        public void Update(MainGame F, GameTime gameTime)
+        public void Damage()
         {
+            this.health--;
+        }
+
+        public void Update(MainGame mainGame, GameTime gameTime)
+        {
+            if (this.health < 0)
+            {
+                this.Destroy();
+                mainGame.isGameover = true;
+            }
         }
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)

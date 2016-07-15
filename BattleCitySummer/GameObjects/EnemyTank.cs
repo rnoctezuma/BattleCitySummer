@@ -18,6 +18,8 @@ namespace BattleCitySummer
         public bool destroy = false;
         private double randTimer = 10;
         private double animation = 0;
+        private double shot = 10;
+        private double pos = 0;
         private Texture2D Sprite { get; set; }
         private int frameWidth = 16;
         private int frameHeight = 16;
@@ -46,67 +48,79 @@ namespace BattleCitySummer
             return destroy;
         }
 
-        public void Damage()
-        {
-            this.Destroy();
-        }
-
         public void Update(MainGame mainGame, GameTime gameTime)
         {
-     /*       if (testSpawn == 1)
-            {
-                EnemySpawn(mainGame);
-                testSpawn = 0;
-            }
-            */
-            int[,] logicMap = GetLogicMap(mainGame.map.map);
-            /*   
-                    if (gameTime.TotalGameTime.TotalSeconds <= 20)
-                    {
-                        if (randTimer >= 10)
-                        {
-                            RandomMove();
-                            randTimer = 0;
+            int[,] logicMap = GetLogicMap(mainGame.map.gameMap);
 
-                        }
-                    }
-                    */
-            //     if (gameTime.TotalGameTime.TotalSeconds > 20 && gameTime.TotalGameTime.TotalSeconds <= 50)
-    /*        {
+
+            if (gameTime.TotalGameTime.TotalSeconds <= 20)
+            {
+                if (randTimer >= 10)
+                {
+                    RandomMove();
+                    randTimer = 0;
+
+                }
+                if (randTimer < 11)
+                {
+                    randTimer += 0.1;
+                }
+            }
+            if (gameTime.TotalGameTime.TotalSeconds > 20 && gameTime.TotalGameTime.TotalSeconds <= 50)
+            {
                 SearchTargetPosition(mainGame);
                 FindOptimalPath(logicMap);
                 MoveToTarget();
             }
-      */      
 
-       //     if (gameTime.TotalGameTime.TotalSeconds > 50)
- /*           {
+            if (gameTime.TotalGameTime.TotalSeconds > 50)
+            {
                 chooseTargetPosition = 1;
                 SearchTargetPosition(mainGame);
                 FindOptimalPath(logicMap);
                 MoveToTarget();
             }
-            if (randTimer < 11)
-            {
-                randTimer += 0.1;
-            }
-            
-*/
-            double angle = Math.Atan2(this.box.vy, this.box.vx);      //V METODU POTOM
+
+
+            double angle = 0;
+            if (this.box.vx != 0 || this.box.vy != 0)
+                angle = Math.Atan2(this.box.vy, this.box.vx);      //V METODU POTOM
+            else
+                angle = 1.0 / 2.0 * Math.PI;
 
             if (angle > -0.3 && angle < 0.3)
+            {
                 currentFrame.X = 3;
+                this.pos = 0;
+            }
             if (angle > Math.PI / 2 - 0.3 && angle < Math.PI / 2 + 0.3)
+            {
                 currentFrame.X = 2;
+                this.pos = 1.0 / 2.0 * Math.PI;
+            }
             if (angle > Math.PI - 0.3 && angle < Math.PI + 0.3)
+            {
                 currentFrame.X = 1;
+                this.pos = Math.PI;
+            }
             if (angle > -Math.PI / 2 - 0.3 && angle < -Math.PI / 2 + 0.3)
+            {
                 currentFrame.X = 0;
+                this.pos = 3.0 / 2.0 * Math.PI;
+            }
 
             if (Math.Abs(this.box.vx) > 0 || Math.Abs(this.box.vy) > 0)
                 this.animation += 0.1;
             if (this.animation >= 2)
                 this.animation = 0;
+
+            this.shot += 0.05;
+            if (this.shot >= 10)
+            {
+                this.Shot(mainGame);
+                this.shot = 0;
+            }
+
         }
 
 
@@ -204,7 +218,7 @@ namespace BattleCitySummer
             }
             else
             {
-                TargerPosition[0] = 9;
+                TargerPosition[0] = 10;
                 TargerPosition[1] = 16;
             }
         }
@@ -216,7 +230,7 @@ namespace BattleCitySummer
             double nextX = 0;
             double nextY = 0;
             bool axis = false; //false - x, true - y
-            if (wave.Count != 1)
+            if (wave.Count > 1)
             {
                 double diffX = (wave[wave.Count - 2].Key - 1) * 32 + 16 - this.box.x;
                 double diffY = (wave[wave.Count - 2].Value - 1) * 32 + 16 - this.box.y;
@@ -261,6 +275,11 @@ namespace BattleCitySummer
                     }
                 }
             }
+            else
+            {
+                this.box.vx = 0;
+                this.box.vy = 0;
+            }
         }
 
         public void RandomMove()
@@ -268,54 +287,37 @@ namespace BattleCitySummer
             int direction = rand.Next(0, 100);
             if (direction >= 0 && direction <= 24)
             {
-                this.box.vx = -0.6;
+                this.box.vx = -0.3;
                 this.box.vy = 0;
             }
             if (direction > 24 && direction <= 49)
             {
-                this.box.vx = 0.6;
+                this.box.vx = 0.3;
                 this.box.vy = 0;
             }
             if (direction > 49 && direction <= 74)
             {
-                this.box.vy = -0.6;
+                this.box.vy = -0.3;
                 this.box.vx = 0;
             }
             if (direction > 74)
             {
-                this.box.vy = 0.6;
+                this.box.vy = 0.3;
                 this.box.vx = 0;
             }
         }
 
-        public void EnemySpawn(MainGame mainGame)
+        public void Shot(MainGame mainGame)
         {
-            /*
-            int spawnPos = rand.Next(0, 18);
-            int leftRight = rand.Next(0, 2);
-            int playerPosX = (int)Math.Floor(mainGame.player.box.x / 32d);
-            int playerPosY = (int)Math.Floor(mainGame.player.box.y / 32d);
-            if (playerPosY == 0)
-            {
-                if (playerPosX == spawnPos)
-                {
-                    if (playerPosX == 0)
-                        spawnPos = rand.Next(1, 18);
-                    else if (playerPosX == 17)
-                        spawnPos = rand.Next(0, 17);
-                    else if(playerPosX != 0 && playerPosX != 17)
-                    {
-                        if (leftRight == 0)
-                            spawnPos = rand.Next(0, playerPosX);
-                        else
-                            spawnPos = rand.Next(playerPosX + 1, 18);
-                    }
-                }
-            }
-            */
-            mainGame.GameObjects.Add(new EnemyTank(mainGame, 100, 200, mainGame.Sprites[2]));
+            if (pos == 0)
+                mainGame.GameObjects.Add(new Bullet(mainGame, this.box.x + this.box.width + 4, this.box.y + 1, Math.Cos(pos) * 4, Math.Sin(pos) * 4, this, mainGame.Sprites[1]));
+            if (pos == Math.PI)
+                mainGame.GameObjects.Add(new Bullet(mainGame, this.box.x - this.box.width - 4, this.box.y+1, Math.Cos(pos) * 4, Math.Sin(pos) * 4, this, mainGame.Sprites[1]));
+            if (pos == 3.0 / 2.0 * Math.PI)
+                mainGame.GameObjects.Add(new Bullet(mainGame, this.box.x-1, this.box.y - this.box.height - 4, Math.Cos(pos) * 4, Math.Sin(pos) * 4, this, mainGame.Sprites[1]));
+            if (pos == 1.0 / 2.0 * Math.PI)
+                mainGame.GameObjects.Add(new Bullet(mainGame, this.box.x - 1, this.box.y + this.box.height + 2, Math.Cos(pos) * 4, Math.Sin(pos) * 4, this, mainGame.Sprites[1]));
         }
-
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
         {

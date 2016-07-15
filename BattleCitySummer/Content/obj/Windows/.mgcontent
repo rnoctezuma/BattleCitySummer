@@ -10,8 +10,12 @@
     <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteEnemy.png</File>
     <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpritePlayer.png</File>
     <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteExlosion1.png</File>
-    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteExlosion2.png</File>
     <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteBullet.png</File>
     <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteIronWall.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteMenu.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteExlosion2.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteSpawnPlayer.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/SpriteSpawnEnemy.png</File>
+    <File>D:/Desktop/BattleCitySummer/BattleCitySummer/Content/basicFont.spritefont</File>
   </SourceFiles>
 </SourceFileCollection>

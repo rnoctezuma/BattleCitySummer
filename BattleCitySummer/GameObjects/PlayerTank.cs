@@ -14,23 +14,21 @@ namespace BattleCitySummer
         public Box box { get; set; }
         public Texture2D Sprite { get; set; }
         public int health { get; set; }
-        public double shot = 11;
+        public double shot = 21;
         public bool destroy = false;
         private int frameWidth = 16;
         private int frameHeight = 16;
         private Point currentFrame = new Point(0, 0);
         private Point spriteSize = new Point(8, 1);
         private double animation = 0;
-        private Random rand = new Random();
-        public int testSpawn = 1;
-        //  public int score = 0;
+        public int score = 0;
 
         public double pos; //направление взгляда
 
         public PlayerTank(MainGame F, int x, int y, Texture2D Sprite)
         {
             this.box = new Box(x, y, 16, 16, 0, 0, false);
-            this.health = 100;
+            this.health = 3;
             this.pos = 3.0 / 2.0 * Math.PI;
             F.Boxes.Add(this.box);
             this.Sprite = Sprite;
@@ -47,19 +45,9 @@ namespace BattleCitySummer
             return destroy;
         }
 
-        public void Damage()
-        {
-            this.Destroy();
-        }
 
         public void Update(MainGame mainGame, GameTime gameTime)
         {
-            if (testSpawn == 1)
-            {
-                EnemySpawn(mainGame);
-                testSpawn = 0;
-            }
-
             KeyboardState keyboardState = Keyboard.GetState();
             this.box.vx = 0;
             this.box.vy = 0;
@@ -90,7 +78,7 @@ namespace BattleCitySummer
             }
             else if (keyboardState.IsKeyDown(Keys.LeftControl))
             { 
-                if (this.shot > 10)
+                if (this.shot > 20)
                 {
                     this.Shot(mainGame);             
                     this.shot = 0;
@@ -101,9 +89,10 @@ namespace BattleCitySummer
                  this.animation += 0.1;
             if (this.animation >= 2)
                 this.animation = 0;
-            if (health <= 0)
+            if (health < 0)
             {
-                mainGame.gameover = true;
+                this.Destroy();
+                mainGame.isGameover = true;
             }    
         }
 
@@ -119,32 +108,16 @@ namespace BattleCitySummer
                 mainGame.GameObjects.Add(new Bullet(mainGame, this.box.x-2, this.box.y + this.box.height + 2, Math.Cos(pos) * 5, Math.Sin(pos) * 5, this, mainGame.Sprites[1]));
         }
 
-        public void EnemySpawn(MainGame mainGame)
-        {          
-            int spawnPos = rand.Next(0, 18);
-            int leftRight = rand.Next(0, 2);
-            int playerPosX = (int)Math.Floor(mainGame.player.box.x / 32d);
-            int playerPosY = (int)Math.Floor(mainGame.player.box.y / 32d);
-            if (playerPosY == 0)
-            {
-                if (playerPosX == spawnPos)
-                {
-                    if (playerPosX == 0)
-                        spawnPos = rand.Next(1, 18);
-                    else if (playerPosX == 17)
-                        spawnPos = rand.Next(0, 17);
-                    else if(playerPosX != 0 && playerPosX != 17)
-                    {
-                        if (leftRight == 0)
-                            spawnPos = rand.Next(0, playerPosX);
-                        else
-                            spawnPos = rand.Next(playerPosX + 1, 18);
-                    }
-                }
-            }
-            mainGame.GameObjects.Add(new EnemyTank(mainGame, spawnPos * 32 + 16, 16, mainGame.Sprites[2]));
+        public void newPlayerSpawn()
+        {
+            this.box.x = 210;
+            this.box.y = 535;
         }
 
+        public void addScore()
+        {
+            this.score += 100;
+        }
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
         {

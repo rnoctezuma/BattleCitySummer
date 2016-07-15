@@ -23,3 +23,16 @@ D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\SharpDX.Raw
 D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\SharpDX.Direct3D9.xml
 D:\Desktop\BattleCitySummer\BattleCitySummer\obj\x86\Release\BattleCitySummer.exe
 D:\Desktop\BattleCitySummer\BattleCitySummer\obj\x86\Release\BattleCitySummer.pdb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\BrickWall.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteBase.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteBullet.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteEnemy.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteExlosion1.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteExlosion2.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteIronWall.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpritePlayer.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\obj\x86\Release\BattleCitySummer.csprojResolveAssemblyReference.cache
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteMenu.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteSpawnEnemy.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\SpriteSpawnPlayer.xnb
+D:\Desktop\BattleCitySummer\BattleCitySummer\bin\Windows\x86\Release\Content\basicFont.xnb

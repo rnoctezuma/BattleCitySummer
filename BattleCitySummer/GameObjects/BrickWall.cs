@@ -35,6 +35,7 @@ namespace BattleCitySummer
         }
         public void Update(MainGame F, GameTime gameTime)
         {
+
         }
 
         public void Draw(GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
